@@ -34,7 +34,7 @@ function printQuestionMarks(num) {
   }
   
 var orm = {
-    all: function(tableInput, cb) {
+    selectAll: function(tableInput, cb) {
       var queryString = "SELECT * FROM " + tableInput + ";";
       connection.query(queryString, function(err, result) {
         if (err) {
@@ -64,7 +64,30 @@ var orm = {
       });
     },
     // An example of objColVals would be {name: panther, sleepy: true}
-    update: function(table, objColVals, condition, cb) {
+    insertOne: function(table, cols, vals, cb) {
+      // Construct the query string that inserts a single row into the target table
+      var queryString = "INSERT INTO " + table;
+  
+      queryString += " (";
+      queryString += cols.toString();
+      queryString += ") ";
+      queryString += "VALUES (";
+      queryString += printQuestionMarks(vals.length);
+      queryString += ") ";
+  
+  
+      // Perform the database query
+      connection.query(queryString, vals, function(err, result) {
+        if (err) {
+          throw err;
+        }
+  
+        // Return results in callback
+        cb(result);
+      });
+    },
+    //
+    updateOne: function(table, objColVals, condition, cb) {
       var queryString = "UPDATE " + table;
   
       queryString += " SET ";
@@ -80,21 +103,8 @@ var orm = {
   
         cb(result);
       });
-    },
-    delete: function(table, condition, cb) {
-      var queryString = "DELETE FROM " + table;
-      queryString += " WHERE ";
-      queryString += condition;
-  
-      connection.query(queryString, function(err, result) {
-        if (err) {
-          throw err;
-        }
-  
-        cb(result);
-      });
     }
-  };
+};
   
   // Export the orm object for the model (cat.js).
   module.exports = orm;
