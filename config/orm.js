@@ -43,7 +43,7 @@ var orm = {
         cb(result);
       });
     },
-    create: function(table, cols, vals, cb) {
+    insertOne: function(table, cols, vals, cb) {
       var queryString = "INSERT INTO " + table;
   
       queryString += " (";
@@ -64,29 +64,7 @@ var orm = {
       });
     },
     // An example of objColVals would be {name: panther, sleepy: true}
-    insertOne: function(table, cols, vals, cb) {
-      // Construct the query string that inserts a single row into the target table
-      var queryString = "INSERT INTO " + table;
-  
-      queryString += " (";
-      queryString += cols.toString();
-      queryString += ") ";
-      queryString += "VALUES (";
-      queryString += printQuestionMarks(vals.length);
-      queryString += ") ";
-  
-  
-      // Perform the database query
-      connection.query(queryString, vals, function(err, result) {
-        if (err) {
-          throw err;
-        }
-  
-        // Return results in callback
-        cb(result);
-      });
-    },
-    //
+    
     updateOne: function(table, objColVals, condition, cb) {
       var queryString = "UPDATE " + table;
   
