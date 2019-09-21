@@ -2,23 +2,48 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-
-	<link href="https://fonts.googleapis.com/css?family=Crafty+Girls|Fontdiner+Swanky" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
-	<link rel="stylesheet" href="/assets/css/burger_style.css" type="text/css" />
-	<title>Eat Da Burger</title>
-</head>
-
-<body>
-	<img src="/assets/img/burger.png" width="400px" id="cute_burger">
-
-	{{{ body }}}
-
-	<footer class="burgerFooter">
-			<div class="container">
-				<a class="grey-text text-lighten-4 right" href="https://github.com/abigailettore">Github!</a>
-			</div>
-		</div>
-	</footer>
-</body>
+		<link rel="stylesheet" href="/assets/css/burger_style.css" type="text/css"></link>
+		<title>eatDaBurger</title>
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery.js"></script>
+	</head>
+	<body>
+		{{{ body }}}
+	</body>
+	<script>
+		$(".eat-button").on("click", function(event) {
+			event.preventDefault();
+			var id = $(this).data("id");
+			var burgerState = {
+				devoured: true
+			};
+			$.ajax("/api/burgers/" + id, {
+				type: "PUT",
+				data: burgerState
+    		}).then(function() {
+				console.log("the burger has been eaten!");
+				// Reload the page to get the updated list
+				location.reload();
+				}
+			);
+		});
+		$(".cook-form").on("submit", function(event) {
+			event.preventDefault();
+			if ($("#new-burger").val() !== "") {
+				var newBurg = {
+					burger_name: $("#new-burger").val().trim(),
+					devoured: 0
+				};
+				$.ajax("/api/burgers", {
+					type: "POST",
+					data: newBurg
+				}).then(function() {
+					console.log("new burger coming up!");
+					location.reload();
+				});
+			}
+		});
+	</script>
 </html>

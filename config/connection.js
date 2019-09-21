@@ -1,9 +1,9 @@
-// Connect Node to MySQL
 require("dotenv").config()
-
+//connecting to mysql database 
 var mysql = require("mysql");
 
-    var connection = mysql.createConnection({
+    var connection = mysql.createConnection(
+        {
         host: "localhost",
         port: 3306,
         user: "root",
